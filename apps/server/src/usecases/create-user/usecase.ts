@@ -1,13 +1,14 @@
 /**
  * Create User usecase.
- * Orchestrates repository calls and domain logic.
+ * Orchestrates domain services and repository calls.
  */
 
 import { type Result, err, ok } from "neverthrow";
 
-import { conflictError } from "../../domain/shared/errors";
-import type { ConflictError, NotFoundError, UnexpectedError } from "../../domain/shared/errors";
-import type { User, UserRepository } from "../../repositories/user-repository";
+import { conflictError } from "../../domain/errors";
+import type { ConflictError, NotFoundError, UnexpectedError, ValidationError } from "../../domain/errors";
+import type { UserAuthenticationService } from "../../domain/services";
+import type { User, UserRepository } from "../../repositories/interfaces/user-repository";
 import type { CreateUserInput } from "./input";
 
 /**
@@ -23,17 +24,18 @@ export interface CreateUserOutput {
  */
 export interface CreateUserDeps {
   readonly userRepository: UserRepository;
+  readonly userAuthenticationService: UserAuthenticationService;
 }
 
 /**
  * Usecase error - combines domain errors with repository errors.
  */
-export type CreateUserError = ConflictError | NotFoundError | UnexpectedError;
+export type CreateUserError = ConflictError | NotFoundError | UnexpectedError | ValidationError;
 
 /**
  * Execute the create-user usecase.
  *
- * @param deps - Injected dependencies (repositories, etc.)
+ * @param deps - Injected dependencies (repositories, services, etc.)
  * @param input - Validated input data
  * @returns Result with output or error
  */
@@ -41,16 +43,16 @@ export const executeCreateUser = async (
   deps: CreateUserDeps,
   input: CreateUserInput,
 ): Promise<Result<CreateUserOutput, CreateUserError>> => {
-  const { userRepository } = deps;
+  const { userRepository, userAuthenticationService } = deps;
 
-  // Check if email already exists
-  const existingResult = await userRepository.findByEmail(input.email);
+  // Check if email is available using domain service
+  const availabilityResult = await userAuthenticationService.isEmailAvailable(input.email);
 
-  if (existingResult.isErr()) {
-    return err(existingResult.error);
+  if (availabilityResult.isErr()) {
+    return err(availabilityResult.error);
   }
 
-  if (existingResult.value) {
+  if (!availabilityResult.value) {
     return err(
       conflictError(`User with email '${input.email}' already exists`, {
         resource: "User",

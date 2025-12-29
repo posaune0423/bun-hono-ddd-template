@@ -5,9 +5,9 @@
 
 import type { Pool } from "pg";
 
-import { createDb, createPool, type Database } from "../../src/infra/postgres/db";
-import { createPostgresPostRepository } from "../../src/infra/postgres/post-repository";
-import { createPostgresUserRepository } from "../../src/infra/postgres/user-repository";
+import { createDb, createPool, type Database } from "../../src/repositories/postgres/db";
+import { createPostgresPostRepository } from "../../src/repositories/postgres/post-repository";
+import { createPostgresUserRepository } from "../../src/repositories/postgres/user-repository";
 
 /**
  * Test database context with all repositories.

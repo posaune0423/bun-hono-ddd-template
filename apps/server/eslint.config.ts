@@ -9,9 +9,9 @@ import type { Linter } from "eslint";
 /**
  * Dependency direction rules:
  * - routes -> usecases -> domain
- * - usecases -> repositories
- * - infra -> repositories (+domain)
- * - domain must NOT import from routes/usecases/infra
+ * - usecases -> interfaces (repository interfaces)
+ * - repositories -> interfaces (+domain)
+ * - domain must NOT import from routes/usecases/repositories
  */
 const dependencyDirectionRules: Linter.Config = {
   files: ["src/domain/**/*.ts"],
@@ -30,8 +30,8 @@ const dependencyDirectionRules: Linter.Config = {
             message: "Domain layer must not import from usecases layer.",
           },
           {
-            group: ["**/infra/**", "**/infra"],
-            message: "Domain layer must not import from infra layer.",
+            group: ["**/repositories/**", "**/repositories"],
+            message: "Domain layer must not import from repositories layer.",
           },
         ],
       },
@@ -62,7 +62,8 @@ const routesDomainRule: Linter.Config = {
 };
 
 /**
- * Usecases must not import from routes or infra implementations.
+ * Usecases must not import from routes or repository implementations.
+ * However, usecases CAN import from repositories/interfaces (repository interfaces).
  */
 const usecasesDirectionRule: Linter.Config = {
   files: ["src/usecases/**/*.ts"],
@@ -77,8 +78,8 @@ const usecasesDirectionRule: Linter.Config = {
             message: "Usecases must not import from routes layer.",
           },
           {
-            group: ["**/infra/**", "**/infra"],
-            message: "Usecases must not import from infra layer (use repository interface).",
+            group: ["**/repositories/memory/**", "**/repositories/postgres/**"],
+            message: "Usecases must not import from repository implementations (use interface).",
           },
         ],
       },

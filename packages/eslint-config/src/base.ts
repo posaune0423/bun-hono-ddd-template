@@ -1,6 +1,5 @@
 import eslint from "@eslint/js";
 import type { Linter } from "eslint";
-// @ts-expect-error - eslint-config-prettier has no type declarations
 import prettier from "eslint-config-prettier";
 import globals from "globals";
 import tseslint from "typescript-eslint";

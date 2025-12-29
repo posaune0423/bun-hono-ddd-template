@@ -4,8 +4,10 @@
 
 import { Hono } from "hono";
 
-import type { PostRepository } from "../repositories/post-repository";
-import type { UserRepository } from "../repositories/user-repository";
+import { createPostAuthorizationService } from "../domain/services/post-authorization-service";
+import { createUserAuthenticationService } from "../domain/services/user-authentication-service";
+import type { PostRepository } from "../repositories/interfaces/post-repository";
+import type { UserRepository } from "../repositories/interfaces/user-repository";
 import { health } from "./health";
 import { createPostRoutes } from "./posts";
 import { createUserRoutes } from "./users";
@@ -29,15 +31,30 @@ export const createRoutes = (deps?: Partial<RoutesDeps>) => {
 
   // Mount user routes if repository is provided
   if (deps?.userRepository) {
-    const userRoutes = createUserRoutes({ userRepository: deps.userRepository });
+    // Instantiate domain services
+    const userAuthenticationService = createUserAuthenticationService({
+      userRepository: deps.userRepository,
+    });
+
+    const userRoutes = createUserRoutes({
+      userRepository: deps.userRepository,
+      userAuthenticationService,
+    });
     routes.route("/users", userRoutes);
   }
 
   // Mount post routes if both repositories are provided
   if (deps?.postRepository && deps?.userRepository) {
+    // Instantiate domain services
+    const postAuthorizationService = createPostAuthorizationService({
+      postRepository: deps.postRepository,
+      userRepository: deps.userRepository,
+    });
+
     const postRoutes = createPostRoutes({
       postRepository: deps.postRepository,
       userRepository: deps.userRepository,
+      postAuthorizationService,
     });
     routes.route("/posts", postRoutes);
   }

@@ -1,135 +1,299 @@
-# Turborepo starter
+# Bun + Hono + DDD Template
 
-This Turborepo starter is maintained by the Turborepo core team.
+A production-ready template for building backend APIs using Bun runtime, Hono framework, and Domain-Driven Design (DDD) principles. Designed as a starting point for monorepo projects that prioritize type safety, testability, and clean architecture.
 
-## Using this example
+## Features
 
-Run the following command:
+- 🚀 **Fast Development**: Bun runtime with native TypeScript support and hot reload
+- 🔒 **Type Safety**: End-to-end type safety from database schema to API responses
+- 🧪 **Testability**: Dependency injection pattern enables easy unit testing
+- 🏗️ **Clean Architecture**: DDD layering with strict dependency rules
+- 📦 **Monorepo Ready**: Turborepo setup for managing multiple packages and apps
+- 🛡️ **Result-based Error Handling**: neverthrow for explicit error handling
+- ✅ **Schema Validation**: Zod for runtime type checking at API boundaries
 
-```sh
-npx create-turbo@latest
-```
+## Tech Stack
 
-## What's inside?
+### Core
 
-This Turborepo includes the following packages/apps:
+- **Runtime**: [Bun](https://bun.sh/) - Fast JavaScript runtime with native TypeScript support
+- **Framework**: [Hono](https://hono.dev/) - Lightweight, fast web framework
+- **Database**: [PostgreSQL](https://www.postgresql.org/) with [Drizzle ORM](https://orm.drizzle.team/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/) (strict mode)
 
-### Apps and Packages
+### Key Libraries
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- **neverthrow**: Result-based error handling
+- **Zod**: Schema validation and type inference
+- **CUID2**: Collision-resistant IDs
+- **@t3-oss/env-core**: Type-safe environment variable validation
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Tooling
 
-### Utilities
+- **Turborepo**: Build system and task runner
+- **ESLint**: Linting with architecture enforcement
+- **Prettier**: Code formatting with OXC plugin
+- **Bun Test**: Built-in test framework
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## Project Structure
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+.
+├── apps/
+│   └── server/              # Main API server
+│       ├── src/
+│       │   ├── routes/      # HTTP endpoints
+│       │   ├── usecases/    # Business logic
+│       │   ├── repositories/ # Data access layer
+│       │   │   ├── interfaces/  # Repository contracts
+│       │   │   ├── postgres/    # PostgreSQL implementations
+│       │   │   └── memory/      # In-memory implementations (testing)
+│       │   ├── domain/      # Domain models and errors
+│       │   ├── types/       # Shared type definitions
+│       │   └── utils/       # Utility functions
+│       └── tests/
+│           ├── unit/        # Unit tests
+│           └── integration/ # Integration tests
+├── packages/
+│   ├── db/                  # Database schema and migrations
+│   ├── eslint-config/       # Shared ESLint configurations
+│   ├── prettier-config/     # Shared Prettier configuration
+│   ├── typescript-config/   # Shared TypeScript configurations
+│   └── utils/               # Shared utilities (logger, etc.)
+└── .kiro/                   # AI-DLC development steering
+    ├── steering/            # Project-wide context and rules
+    └── settings/            # Spec-driven development templates
 ```
 
-### Develop
+## Environment Variables
 
-To develop all apps and packages, run the following command:
+This project uses [t3-env](https://env.t3.gg/) for type-safe environment variable management.
 
-```
-cd my-turborepo
+### Configuration
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+All environment variables are defined and validated in `apps/server/src/env.ts`. **Never use `process.env` directly** in your code - always import and use the `env` object instead.
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+```typescript
+import { env } from "./env";
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+// ✅ Good: Type-safe and validated
+const port = env.PORT;
+const dbUrl = env.DATABASE_URL;
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+// ❌ Bad: No type safety or validation
+const port = process.env.PORT;
 ```
 
-### Remote Caching
+### Available Variables
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+| Variable       | Type                                    | Default                                                | Description               |
+| -------------- | --------------------------------------- | ------------------------------------------------------ | ------------------------- |
+| `DATABASE_URL` | URL string                              | `postgres://postgres:postgres@localhost:5432/postgres` | PostgreSQL connection URL |
+| `PORT`         | Positive integer                        | `8787`                                                 | Server port number        |
+| `NODE_ENV`     | `development` \| `production` \| `test` | `development`                                          | Node environment          |
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### Adding New Variables
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+1. Define the variable in `apps/server/src/env.ts`:
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```typescript
+export const env = createEnv({
+  server: {
+    // Add your new variable here
+    MY_API_KEY: z.string().min(1).describe("My API key"),
+  },
+  // ... rest of config
+});
 ```
 
-## Useful Links
+2. Use it in your code:
 
-Learn more about the power of Turborepo:
+```typescript
+import { env } from "./env";
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+const apiKey = env.MY_API_KEY; // Type-safe!
+```
+
+### Validation
+
+Environment variables are validated at startup. If validation fails, the application will exit with a clear error message:
+
+```bash
+❌ Invalid environment variables:
+  - PORT: Invalid input: expected number, received NaN
+```
+
+## Architecture
+
+This template follows a **Layered DDD Architecture** with strict dependency direction:
+
+```
+routes → usecases → repositories → domain
+         ↓
+      repositories/{provider} (implements interfaces)
+```
+
+### Layer Responsibilities
+
+- **routes/**: HTTP endpoints, request/response handling, input parsing
+- **usecases/**: Business logic orchestration, coordinates repositories
+- **repositories/interfaces/**: Data access interfaces (contracts)
+- **repositories/{provider}/**: Infrastructure implementations (postgres, memory)
+- **domain/**: Core business logic, value objects, entities, shared errors
+- **types/**: Shared type definitions
+- **utils/**: Utility functions
+
+See [`.kiro/steering/structure.md`](.kiro/steering/structure.md) for detailed architecture documentation.
+
+## Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh/) >= 1.3.5
+- [Node.js](https://nodejs.org/) >= 24.0.0
+- [PostgreSQL](https://www.postgresql.org/) (for production)
+- [Docker](https://www.docker.com/) (optional, for local PostgreSQL)
+
+### Installation
+
+```bash
+# Install dependencies
+bun install
+
+# Start PostgreSQL (using Docker)
+docker-compose up -d
+
+# Push database schema
+bun run db:push
+
+# Start development server
+bun run dev
+```
+
+The API server will be available at `http://localhost:3000`.
+
+### Available Scripts
+
+```bash
+# Development
+bun run dev              # Start all apps in development mode
+bun run dev --filter=server  # Start specific app
+
+# Building
+bun run build            # Build all apps and packages
+
+# Testing
+bun run test             # Run all tests
+bun run test:unit        # Run unit tests only
+bun run test:integration # Run integration tests only
+
+# Code Quality
+bun run lint             # Lint all packages
+bun run lint:fix         # Fix linting issues
+bun run format           # Check code formatting
+bun run format:fix       # Fix code formatting
+bun run typecheck        # Type check all packages
+
+# Database
+bun run db:generate      # Generate migrations
+bun run db:push          # Push schema to database
+bun run db:studio        # Open Drizzle Studio
+
+# Utilities
+bun run clean            # Clean build artifacts and node_modules
+```
+
+## Development Workflow
+
+This project uses **AI-DLC (AI Development Life Cycle)** with Kiro-style Spec-Driven Development.
+
+### Key Concepts
+
+- **Steering** (`.kiro/steering/`): Project-wide rules and context that guide AI
+  - `product.md`: Product vision and capabilities
+  - `tech.md`: Technology stack and patterns
+  - `structure.md`: Architecture and code organization
+
+- **Specs** (`.kiro/specs/`): Feature-specific development specifications
+  - Requirements → Design → Tasks → Implementation workflow
+  - Human review required at each phase
+
+### Development Phases
+
+1. **Phase 0 (Optional)**: Review steering documents
+2. **Phase 1 (Specification)**:
+   - Initialize spec with `/kiro/spec-init "description"`
+   - Define requirements with `/kiro/spec-requirements {feature}`
+   - Design solution with `/kiro/spec-design {feature}`
+   - Generate tasks with `/kiro/spec-tasks {feature}`
+3. **Phase 2 (Implementation)**: Implement with `/kiro/spec-impl {feature}`
+
+See workspace rules for detailed workflow.
+
+## Testing Strategy
+
+### Unit Tests
+
+- Test individual functions and usecases in isolation
+- Use dependency injection for test doubles
+- Located in `tests/unit/`
+
+### Integration Tests
+
+- Test API endpoints with real dependencies
+- Use in-memory repositories or test database
+- Located in `tests/integration/`
+
+### Test Helpers
+
+- `tests/helpers/memory.ts`: In-memory repository factories
+- `tests/helpers/postgres.ts`: PostgreSQL test utilities
+
+## Code Quality
+
+### Type Safety
+
+- TypeScript strict mode enabled
+- Type inference from Zod schemas
+- Discriminated unions for error types
+- Branded types pattern support
+
+### Architecture Enforcement
+
+- ESLint rules enforce layer boundaries
+- Dependency direction validation
+- Custom rules for DDD compliance
+
+### Error Handling
+
+- Result-based error handling with neverthrow
+- No exceptions for business logic
+- Domain errors with discriminated unions
+- HTTP error mapping at route layer
+
+## Contributing
+
+1. Follow the established architecture patterns
+2. Write tests for new features
+3. Ensure all checks pass: `bun run typecheck && bun run lint && bun run test`
+4. Use the AI-DLC workflow for new features
+
+## License
+
+MIT
+
+## Resources
+
+### Documentation
+
+- [Bun Documentation](https://bun.sh/docs)
+- [Hono Documentation](https://hono.dev/)
+- [Drizzle ORM Documentation](https://orm.drizzle.team/)
+- [neverthrow Documentation](https://github.com/supermacro/neverthrow)
+- [Turborepo Documentation](https://turborepo.com/)
+
+### Project Steering
+
+- [Product Vision](.kiro/steering/product.md)
+- [Technology Stack](.kiro/steering/tech.md)
+- [Architecture Guide](.kiro/steering/structure.md)

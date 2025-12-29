@@ -8,8 +8,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
-import type { PostRepository } from "./repositories/post-repository";
-import type { UserRepository } from "./repositories/user-repository";
+import type { PostRepository } from "./repositories/interfaces/post-repository";
+import type { UserRepository } from "./repositories/interfaces/user-repository";
 import { createRoutes } from "./routes";
 
 /**

@@ -4,12 +4,11 @@
  */
 
 import { app } from "./app";
+import { env } from "./env";
 
-const PORT = Number(process.env.PORT) || 3000;
-
-console.log(`Server starting on port ${PORT}...`);
+console.log(`Server starting on port ${env.PORT}...`);
 
 export default {
-  port: PORT,
+  port: env.PORT,
   fetch: app.fetch,
 };

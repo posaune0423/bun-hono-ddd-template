@@ -23,8 +23,19 @@
       "dependsOn": ["^typecheck"]
     },
     "test": {
-      "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "src/**", "tests/**"],
+      "cache": false
+    },
+    "test:unit": {
+      "inputs": ["$TURBO_DEFAULT$", "src/**", "tests/unit/**"],
+      "outputs": []
+    },
+    "test:integration": {
+      "inputs": ["$TURBO_DEFAULT$", "src/**", "tests/integration/**"],
+      "cache": false
+    },
+    "test:e2e": {
+      "inputs": ["$TURBO_DEFAULT$", "src/**", "tests/e2e/**"],
       "cache": false
     },
     "dev": {

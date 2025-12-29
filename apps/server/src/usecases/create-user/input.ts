@@ -6,7 +6,7 @@
 import { type Result, err, ok } from "neverthrow";
 import { z } from "zod";
 
-import { type ValidationError, validationError } from "../../domain/shared/errors";
+import { type ValidationError, validationError } from "../../domain/errors";
 
 /**
  * Input schema for creating a user.

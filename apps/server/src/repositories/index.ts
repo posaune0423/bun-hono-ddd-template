@@ -1,6 +1,8 @@
 /**
- * Repository interfaces index.
+ * Repositories index.
+ * Contains interfaces and implementations.
  */
 
-export type { CreateUserInput, User, UserRepository, UserRepositoryError } from "./user-repository";
-export type { CreatePostInput, Post, PostRepository, PostRepositoryError } from "./post-repository";
+export * as interfaces from "./interfaces";
+export * as postgres from "./postgres";
+export * as memory from "./memory";
