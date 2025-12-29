@@ -28,7 +28,13 @@ describe("Domain Errors", () => {
     it("should create ValidationError with field and details", () => {
       const error = validationError("Invalid email", {
         field: "email",
-        details: [{ field: "email", message: "Must be valid email", code: "invalid_format" }],
+        details: [
+          {
+            field: "email",
+            message: "Must be valid email",
+            code: "invalid_format",
+          },
+        ],
       });
 
       expect(error.type).toBe("ValidationError");

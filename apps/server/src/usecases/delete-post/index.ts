@@ -7,4 +7,8 @@ export { DeletePostInputSchema, parseDeletePostInput } from "./input";
 export type { DeletePostInput } from "./input";
 
 export { executeDeletePost } from "./usecase";
-export type { DeletePostDeps, DeletePostError, DeletePostOutput } from "./usecase";
+export type {
+  DeletePostDeps,
+  DeletePostError,
+  DeletePostOutput,
+} from "./usecase";

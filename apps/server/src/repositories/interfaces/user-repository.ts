@@ -6,7 +6,11 @@
 
 import type { Result } from "neverthrow";
 
-import type { ConflictError, NotFoundError, UnexpectedError } from "../../domain/errors";
+import type {
+  ConflictError,
+  NotFoundError,
+  UnexpectedError,
+} from "../../domain/errors";
 
 /**
  * User entity shape (for repository operations).
@@ -60,7 +64,10 @@ export interface FindAllUsersResult {
 /**
  * Repository error types.
  */
-export type UserRepositoryError = NotFoundError | ConflictError | UnexpectedError;
+export type UserRepositoryError =
+  | NotFoundError
+  | ConflictError
+  | UnexpectedError;
 
 /**
  * User Repository interface.
@@ -83,7 +90,9 @@ export interface UserRepository {
    * Find all users with pagination.
    * Excludes soft-deleted users.
    */
-  findAll(options: FindAllUsersOptions): Promise<Result<FindAllUsersResult, UserRepositoryError>>;
+  findAll(
+    options: FindAllUsersOptions,
+  ): Promise<Result<FindAllUsersResult, UserRepositoryError>>;
 
   /**
    * Create a new user.
@@ -96,7 +105,10 @@ export interface UserRepository {
    * Returns NotFoundError if user does not exist.
    * Returns ConflictError if email already exists.
    */
-  update(id: string, input: UpdateUserInput): Promise<Result<User, UserRepositoryError>>;
+  update(
+    id: string,
+    input: UpdateUserInput,
+  ): Promise<Result<User, UserRepositoryError>>;
 
   /**
    * Soft delete a user by setting deletedAt.

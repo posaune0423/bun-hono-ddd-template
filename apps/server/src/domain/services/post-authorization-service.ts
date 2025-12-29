@@ -55,19 +55,27 @@ export interface PostAuthorizationService {
    * Check if user can edit a post.
    * Only the author can edit their own posts.
    */
-  canEditPost(userId: string, postId: string): Promise<Result<AuthorizationResult, AuthorizationServiceError>>;
+  canEditPost(
+    userId: string,
+    postId: string,
+  ): Promise<Result<AuthorizationResult, AuthorizationServiceError>>;
 
   /**
    * Check if user can delete a post.
    * Only the author can delete their own posts.
    */
-  canDeletePost(userId: string, postId: string): Promise<Result<AuthorizationResult, AuthorizationServiceError>>;
+  canDeletePost(
+    userId: string,
+    postId: string,
+  ): Promise<Result<AuthorizationResult, AuthorizationServiceError>>;
 
   /**
    * Check if user can view a post.
    * All users can view non-deleted posts.
    */
-  canViewPost(postId: string): Promise<Result<AuthorizationResult, AuthorizationServiceError>>;
+  canViewPost(
+    postId: string,
+  ): Promise<Result<AuthorizationResult, AuthorizationServiceError>>;
 }
 
 /**
@@ -81,13 +89,17 @@ export interface CreatePostAuthorizationServiceDeps {
 /**
  * Create PostAuthorizationService instance.
  */
-export function createPostAuthorizationService(deps: CreatePostAuthorizationServiceDeps): PostAuthorizationService {
+export function createPostAuthorizationService(
+  deps: CreatePostAuthorizationServiceDeps,
+): PostAuthorizationService {
   const { postRepository, userRepository } = deps;
 
   /**
    * Helper to verify user exists and is not deleted.
    */
-  async function verifyUserExists(userId: string): Promise<Result<User, AuthorizationServiceError>> {
+  async function verifyUserExists(
+    userId: string,
+  ): Promise<Result<User, AuthorizationServiceError>> {
     const userResult = await userRepository.findById(userId);
     if (userResult.isErr()) {
       return err({
@@ -110,7 +122,9 @@ export function createPostAuthorizationService(deps: CreatePostAuthorizationServ
   /**
    * Helper to verify post exists and is not deleted.
    */
-  async function verifyPostExists(postId: string): Promise<Result<Post, AuthorizationServiceError>> {
+  async function verifyPostExists(
+    postId: string,
+  ): Promise<Result<Post, AuthorizationServiceError>> {
     const postResult = await postRepository.findById(postId);
     if (postResult.isErr()) {
       return err({

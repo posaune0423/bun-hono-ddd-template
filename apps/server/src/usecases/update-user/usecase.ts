@@ -5,8 +5,15 @@
 
 import { type Result, err, ok } from "neverthrow";
 
-import type { ConflictError, NotFoundError, UnexpectedError } from "../../domain/errors";
-import type { User, UserRepository } from "../../repositories/interfaces/user-repository";
+import type {
+  ConflictError,
+  NotFoundError,
+  UnexpectedError,
+} from "../../domain/errors";
+import type {
+  User,
+  UserRepository,
+} from "../../repositories/interfaces/user-repository";
 import type { PatchUserInput, PutUserInput } from "./input";
 
 /**

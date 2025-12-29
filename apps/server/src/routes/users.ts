@@ -6,11 +6,22 @@ import { Hono } from "hono";
 
 import type { UserAuthenticationService } from "../domain/services/user-authentication-service";
 import type { UserRepository } from "../repositories/interfaces/user-repository";
-import { executeCreateUser, parseCreateUserInput } from "../usecases/create-user";
-import { executeDeleteUser, parseDeleteUserInput } from "../usecases/delete-user";
+import {
+  executeCreateUser,
+  parseCreateUserInput,
+} from "../usecases/create-user";
+import {
+  executeDeleteUser,
+  parseDeleteUserInput,
+} from "../usecases/delete-user";
 import { executeGetUser, parseGetUserInput } from "../usecases/get-user";
 import { executeListUsers, parseListUsersInput } from "../usecases/list-users";
-import { executePatchUser, executePutUser, parsePatchUserInput, parsePutUserInput } from "../usecases/update-user";
+import {
+  executePatchUser,
+  executePutUser,
+  parsePatchUserInput,
+  parsePutUserInput,
+} from "../usecases/update-user";
 import { sendHttpError } from "../utils/http-error";
 
 /**
@@ -32,7 +43,7 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
    * GET /users
    * List all users with pagination.
    */
-  users.get("/", async c => {
+  users.get("/", async (c) => {
     const query = c.req.query();
 
     const inputResult = parseListUsersInput(query);
@@ -41,7 +52,10 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
       return sendHttpError(c, inputResult.error);
     }
 
-    const result = await executeListUsers({ userRepository: deps.userRepository }, inputResult.value);
+    const result = await executeListUsers(
+      { userRepository: deps.userRepository },
+      inputResult.value,
+    );
 
     if (result.isErr()) {
       return sendHttpError(c, result.error);
@@ -57,14 +71,17 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
    * GET /users/:id
    * Get a single user by ID.
    */
-  users.get("/:id", async c => {
+  users.get("/:id", async (c) => {
     const inputResult = parseGetUserInput({ id: c.req.param("id") });
 
     if (inputResult.isErr()) {
       return sendHttpError(c, inputResult.error);
     }
 
-    const result = await executeGetUser({ userRepository: deps.userRepository }, inputResult.value);
+    const result = await executeGetUser(
+      { userRepository: deps.userRepository },
+      inputResult.value,
+    );
 
     if (result.isErr()) {
       return sendHttpError(c, result.error);
@@ -77,7 +94,7 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
    * POST /users
    * Create a new user.
    */
-  users.post("/", async c => {
+  users.post("/", async (c) => {
     const body = await c.req.json();
 
     const inputResult = parseCreateUserInput(body);
@@ -105,7 +122,7 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
    * PUT /users/:id
    * Full update of a user.
    */
-  users.put("/:id", async c => {
+  users.put("/:id", async (c) => {
     const body = await c.req.json();
 
     const inputResult = parsePutUserInput({
@@ -117,7 +134,10 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
       return sendHttpError(c, inputResult.error);
     }
 
-    const result = await executePutUser({ userRepository: deps.userRepository }, inputResult.value);
+    const result = await executePutUser(
+      { userRepository: deps.userRepository },
+      inputResult.value,
+    );
 
     if (result.isErr()) {
       return sendHttpError(c, result.error);
@@ -130,7 +150,7 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
    * PATCH /users/:id
    * Partial update of a user.
    */
-  users.patch("/:id", async c => {
+  users.patch("/:id", async (c) => {
     const body = await c.req.json();
 
     const inputResult = parsePatchUserInput({
@@ -142,7 +162,10 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
       return sendHttpError(c, inputResult.error);
     }
 
-    const result = await executePatchUser({ userRepository: deps.userRepository }, inputResult.value);
+    const result = await executePatchUser(
+      { userRepository: deps.userRepository },
+      inputResult.value,
+    );
 
     if (result.isErr()) {
       return sendHttpError(c, result.error);
@@ -155,14 +178,17 @@ export const createUserRoutes = (deps: UserRoutesDeps) => {
    * DELETE /users/:id
    * Soft delete a user.
    */
-  users.delete("/:id", async c => {
+  users.delete("/:id", async (c) => {
     const inputResult = parseDeleteUserInput({ id: c.req.param("id") });
 
     if (inputResult.isErr()) {
       return sendHttpError(c, inputResult.error);
     }
 
-    const result = await executeDeleteUser({ userRepository: deps.userRepository }, inputResult.value);
+    const result = await executeDeleteUser(
+      { userRepository: deps.userRepository },
+      inputResult.value,
+    );
 
     if (result.isErr()) {
       return sendHttpError(c, result.error);

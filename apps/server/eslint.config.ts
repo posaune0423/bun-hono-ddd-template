@@ -53,7 +53,8 @@ const routesDomainRule: Linter.Config = {
         patterns: [
           {
             group: ["**/domain/*/services/**", "**/domain/*/value-objects/**"],
-            message: "Routes should use usecases, not domain services/value-objects directly.",
+            message:
+              "Routes should use usecases, not domain services/value-objects directly.",
           },
         ],
       },
@@ -79,7 +80,8 @@ const usecasesDirectionRule: Linter.Config = {
           },
           {
             group: ["**/repositories/memory/**", "**/repositories/postgres/**"],
-            message: "Usecases must not import from repository implementations (use interface).",
+            message:
+              "Usecases must not import from repository implementations (use interface).",
           },
         ],
       },

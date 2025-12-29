@@ -92,7 +92,10 @@ export const validationError = (
   details: options?.details,
 });
 
-export const notFoundError = (resource: string, id?: string): NotFoundError => ({
+export const notFoundError = (
+  resource: string,
+  id?: string,
+): NotFoundError => ({
   type: "NotFoundError",
   message: `${resource}${id ? ` with id '${id}'` : ""} not found`,
   resource,
@@ -109,18 +112,26 @@ export const conflictError = (
   conflictReason: options?.conflictReason,
 });
 
-export const unauthorizedError = (message = "Authentication required"): UnauthorizedError => ({
+export const unauthorizedError = (
+  message = "Authentication required",
+): UnauthorizedError => ({
   type: "UnauthorizedError",
   message,
 });
 
-export const forbiddenError = (message: string, requiredPermission?: string): ForbiddenError => ({
+export const forbiddenError = (
+  message: string,
+  requiredPermission?: string,
+): ForbiddenError => ({
   type: "ForbiddenError",
   message,
   requiredPermission,
 });
 
-export const unexpectedError = (message: string, cause?: unknown): UnexpectedError => ({
+export const unexpectedError = (
+  message: string,
+  cause?: unknown,
+): UnexpectedError => ({
   type: "UnexpectedError",
   message,
   cause,

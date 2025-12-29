@@ -8,7 +8,11 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import { createApp } from "../../../src/app";
 import type { Post } from "../../../src/repositories/interfaces/post-repository";
 import type { User } from "../../../src/repositories/interfaces/user-repository";
-import { clearTestContext, createInMemoryTestContext, type InMemoryTestContext } from "../../helpers/memory";
+import {
+  clearTestContext,
+  createInMemoryTestContext,
+  type InMemoryTestContext,
+} from "../../helpers/memory";
 
 describe("Post Routes Integration", () => {
   let ctx: InMemoryTestContext;
@@ -188,7 +192,9 @@ describe("Post Routes Integration", () => {
       });
 
       // Filter by first author
-      const firstAuthorResponse = await app.request(`/posts?authorId=${testUser.id}`);
+      const firstAuthorResponse = await app.request(
+        `/posts?authorId=${testUser.id}`,
+      );
       const firstAuthorBody = (await firstAuthorResponse.json()) as {
         data: Post[];
         pagination: { total: number };
@@ -196,10 +202,14 @@ describe("Post Routes Integration", () => {
 
       expect(firstAuthorBody.data).toHaveLength(2);
       expect(firstAuthorBody.pagination.total).toBe(2);
-      expect(firstAuthorBody.data.every(post => post.authorId === testUser.id)).toBe(true);
+      expect(
+        firstAuthorBody.data.every((post) => post.authorId === testUser.id),
+      ).toBe(true);
 
       // Filter by second author
-      const secondAuthorResponse = await app.request(`/posts?authorId=${secondUser.id}`);
+      const secondAuthorResponse = await app.request(
+        `/posts?authorId=${secondUser.id}`,
+      );
       const secondAuthorBody = (await secondAuthorResponse.json()) as {
         data: Post[];
         pagination: { total: number };
@@ -294,7 +304,10 @@ describe("Post Routes Integration", () => {
 
       expect(response.status).toBe(400);
 
-      const body = (await response.json()) as { type: string; errors: unknown[] };
+      const body = (await response.json()) as {
+        type: string;
+        errors: unknown[];
+      };
 
       expect(body.type).toBe("urn:app:error:validation");
       expect(body.errors).toBeDefined();

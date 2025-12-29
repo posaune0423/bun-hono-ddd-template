@@ -6,9 +6,16 @@
 import { type Result, err, ok } from "neverthrow";
 
 import { unauthorizedError } from "../../domain/errors";
-import type { NotFoundError, UnauthorizedError, UnexpectedError } from "../../domain/errors";
+import type {
+  NotFoundError,
+  UnauthorizedError,
+  UnexpectedError,
+} from "../../domain/errors";
 import type { PostAuthorizationService } from "../../domain/services";
-import type { Post, PostRepository } from "../../repositories/interfaces/post-repository";
+import type {
+  Post,
+  PostRepository,
+} from "../../repositories/interfaces/post-repository";
 import type { PatchPostInput, PutPostInput } from "./input";
 
 /**
@@ -29,7 +36,10 @@ export interface UpdatePostDeps {
 /**
  * Usecase error.
  */
-export type UpdatePostError = NotFoundError | UnauthorizedError | UnexpectedError;
+export type UpdatePostError =
+  | NotFoundError
+  | UnauthorizedError
+  | UnexpectedError;
 
 /**
  * Execute the update-post usecase for partial update (PATCH).
@@ -45,14 +55,21 @@ export const executePatchPost = async (
   const { postRepository, postAuthorizationService } = deps;
 
   // Check authorization using domain service
-  const authResult = await postAuthorizationService.canEditPost(input.userId, input.id);
+  const authResult = await postAuthorizationService.canEditPost(
+    input.userId,
+    input.id,
+  );
 
   if (authResult.isErr()) {
     return err(authResult.error);
   }
 
   if (!authResult.value.isAuthorized) {
-    return err(unauthorizedError(authResult.value.reason ?? "You are not authorized to edit this post"));
+    return err(
+      unauthorizedError(
+        authResult.value.reason ?? "You are not authorized to edit this post",
+      ),
+    );
   }
 
   const result = await postRepository.update(input.id, input.data);
@@ -78,14 +95,21 @@ export const executePutPost = async (
   const { postRepository, postAuthorizationService } = deps;
 
   // Check authorization using domain service
-  const authResult = await postAuthorizationService.canEditPost(input.userId, input.id);
+  const authResult = await postAuthorizationService.canEditPost(
+    input.userId,
+    input.id,
+  );
 
   if (authResult.isErr()) {
     return err(authResult.error);
   }
 
   if (!authResult.value.isAuthorized) {
-    return err(unauthorizedError(authResult.value.reason ?? "You are not authorized to edit this post"));
+    return err(
+      unauthorizedError(
+        authResult.value.reason ?? "You are not authorized to edit this post",
+      ),
+    );
   }
 
   const result = await postRepository.update(input.id, input.data);

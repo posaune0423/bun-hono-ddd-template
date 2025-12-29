@@ -7,4 +7,8 @@ export { CreatePostInputSchema, parseCreatePostInput } from "./input";
 export type { CreatePostInput } from "./input";
 
 export { executeCreatePost } from "./usecase";
-export type { CreatePostDeps, CreatePostError, CreatePostOutput } from "./usecase";
+export type {
+  CreatePostDeps,
+  CreatePostError,
+  CreatePostOutput,
+} from "./usecase";

@@ -23,7 +23,10 @@ import {
  * @param instance - Request path or identifier for the specific occurrence
  * @returns HTTP error response with status, body, and optional headers
  */
-export const toHttpError = (error: DomainError | ZodError, instance?: string): HttpErrorResponse => {
+export const toHttpError = (
+  error: DomainError | ZodError,
+  instance?: string,
+): HttpErrorResponse => {
   // Handle ZodError (from DTO validation)
   if ("issues" in error && Array.isArray(error.issues)) {
     const zodError = error as ZodError;
@@ -46,13 +49,16 @@ export const toHttpError = (error: DomainError | ZodError, instance?: string): H
   const errorType = domainError.type;
   const status = ERROR_STATUS_CODES[errorType] ?? 500;
   const title = ERROR_TITLES[errorType] ?? "Internal Server Error";
-  const typeUrn = ERROR_TYPE_URNS[errorType as keyof typeof ERROR_TYPE_URNS] ?? ERROR_TYPE_URNS.UnexpectedError;
+  const typeUrn =
+    ERROR_TYPE_URNS[errorType as keyof typeof ERROR_TYPE_URNS] ??
+    ERROR_TYPE_URNS.UnexpectedError;
 
   const body: ProblemDetails = {
     type: typeUrn,
     title,
     status,
-    detail: status === 500 ? "An unexpected error occurred" : domainError.message,
+    detail:
+      status === 500 ? "An unexpected error occurred" : domainError.message,
     instance,
   };
 
@@ -76,7 +82,10 @@ export const toHttpError = (error: DomainError | ZodError, instance?: string): H
  * Helper to send HTTP error response from Hono context.
  * Use this in route handlers after Result.isErr() check.
  */
-export const sendHttpError = (c: Context, error: DomainError | ZodError): Response => {
+export const sendHttpError = (
+  c: Context,
+  error: DomainError | ZodError,
+): Response => {
   const { status, body, headers } = toHttpError(error, c.req.path);
 
   return c.json(body, status as 400 | 401 | 403 | 404 | 409 | 500, headers);

@@ -7,7 +7,11 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 
 import { createApp } from "../../../src/app";
 import type { User } from "../../../src/repositories/interfaces/user-repository";
-import { clearTestContext, createInMemoryTestContext, type InMemoryTestContext } from "../../helpers/memory";
+import {
+  clearTestContext,
+  createInMemoryTestContext,
+  type InMemoryTestContext,
+} from "../../helpers/memory";
 
 describe("User Routes", () => {
   let ctx: InMemoryTestContext;
@@ -44,9 +48,18 @@ describe("User Routes", () => {
 
     it("should return list of users with pagination", async () => {
       // Create test users
-      await ctx.userRepository.create({ name: "User 1", email: "user1@example.com" });
-      await ctx.userRepository.create({ name: "User 2", email: "user2@example.com" });
-      await ctx.userRepository.create({ name: "User 3", email: "user3@example.com" });
+      await ctx.userRepository.create({
+        name: "User 1",
+        email: "user1@example.com",
+      });
+      await ctx.userRepository.create({
+        name: "User 2",
+        email: "user2@example.com",
+      });
+      await ctx.userRepository.create({
+        name: "User 3",
+        email: "user3@example.com",
+      });
 
       const response = await app.request("/users?limit=2&offset=0");
 
@@ -64,9 +77,18 @@ describe("User Routes", () => {
     });
 
     it("should handle offset correctly", async () => {
-      await ctx.userRepository.create({ name: "User 1", email: "user1@example.com" });
-      await ctx.userRepository.create({ name: "User 2", email: "user2@example.com" });
-      await ctx.userRepository.create({ name: "User 3", email: "user3@example.com" });
+      await ctx.userRepository.create({
+        name: "User 1",
+        email: "user1@example.com",
+      });
+      await ctx.userRepository.create({
+        name: "User 2",
+        email: "user2@example.com",
+      });
+      await ctx.userRepository.create({
+        name: "User 3",
+        email: "user3@example.com",
+      });
 
       const response = await app.request("/users?limit=10&offset=2");
 
@@ -195,7 +217,10 @@ describe("User Routes", () => {
 
       expect(response.status).toBe(400);
 
-      const body = (await response.json()) as { type: string; errors: unknown[] };
+      const body = (await response.json()) as {
+        type: string;
+        errors: unknown[];
+      };
 
       expect(body.type).toBe("urn:app:error:validation");
       expect(body.errors).toBeDefined();

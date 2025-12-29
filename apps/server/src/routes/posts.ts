@@ -7,11 +7,22 @@ import { Hono } from "hono";
 import type { PostAuthorizationService } from "../domain/services";
 import type { PostRepository } from "../repositories/interfaces/post-repository";
 import type { UserRepository } from "../repositories/interfaces/user-repository";
-import { executeCreatePost, parseCreatePostInput } from "../usecases/create-post";
-import { executeDeletePost, parseDeletePostInput } from "../usecases/delete-post";
+import {
+  executeCreatePost,
+  parseCreatePostInput,
+} from "../usecases/create-post";
+import {
+  executeDeletePost,
+  parseDeletePostInput,
+} from "../usecases/delete-post";
 import { executeGetPost, parseGetPostInput } from "../usecases/get-post";
 import { executeListPosts, parseListPostsInput } from "../usecases/list-posts";
-import { executePatchPost, executePutPost, parsePatchPostInput, parsePutPostInput } from "../usecases/update-post";
+import {
+  executePatchPost,
+  executePutPost,
+  parsePatchPostInput,
+  parsePutPostInput,
+} from "../usecases/update-post";
 import { sendHttpError } from "../utils/http-error";
 
 /**
@@ -35,7 +46,7 @@ export const createPostRoutes = (deps: PostRoutesDeps) => {
    * List all posts with pagination.
    * Optional query param: authorId
    */
-  posts.get("/", async c => {
+  posts.get("/", async (c) => {
     const query = c.req.query();
 
     const inputResult = parseListPostsInput(query);
@@ -44,7 +55,10 @@ export const createPostRoutes = (deps: PostRoutesDeps) => {
       return sendHttpError(c, inputResult.error);
     }
 
-    const result = await executeListPosts({ postRepository: deps.postRepository }, inputResult.value);
+    const result = await executeListPosts(
+      { postRepository: deps.postRepository },
+      inputResult.value,
+    );
 
     if (result.isErr()) {
       return sendHttpError(c, result.error);
@@ -60,14 +74,17 @@ export const createPostRoutes = (deps: PostRoutesDeps) => {
    * GET /posts/:id
    * Get a single post by ID.
    */
-  posts.get("/:id", async c => {
+  posts.get("/:id", async (c) => {
     const inputResult = parseGetPostInput({ id: c.req.param("id") });
 
     if (inputResult.isErr()) {
       return sendHttpError(c, inputResult.error);
     }
 
-    const result = await executeGetPost({ postRepository: deps.postRepository }, inputResult.value);
+    const result = await executeGetPost(
+      { postRepository: deps.postRepository },
+      inputResult.value,
+    );
 
     if (result.isErr()) {
       return sendHttpError(c, result.error);
@@ -80,7 +97,7 @@ export const createPostRoutes = (deps: PostRoutesDeps) => {
    * POST /posts
    * Create a new post.
    */
-  posts.post("/", async c => {
+  posts.post("/", async (c) => {
     const body = await c.req.json();
 
     const inputResult = parseCreatePostInput(body);
@@ -109,7 +126,7 @@ export const createPostRoutes = (deps: PostRoutesDeps) => {
    * Full update of a post.
    * TODO: Get userId from authentication middleware instead of request body
    */
-  posts.put("/:id", async c => {
+  posts.put("/:id", async (c) => {
     const body = await c.req.json();
 
     const inputResult = parsePutPostInput({
@@ -142,7 +159,7 @@ export const createPostRoutes = (deps: PostRoutesDeps) => {
    * Partial update of a post.
    * TODO: Get userId from authentication middleware instead of request body
    */
-  posts.patch("/:id", async c => {
+  posts.patch("/:id", async (c) => {
     const body = await c.req.json();
 
     const inputResult = parsePatchPostInput({
@@ -175,7 +192,7 @@ export const createPostRoutes = (deps: PostRoutesDeps) => {
    * Soft delete a post.
    * TODO: Get userId from authentication middleware instead of request header
    */
-  posts.delete("/:id", async c => {
+  posts.delete("/:id", async (c) => {
     // TODO: Get userId from auth middleware
     const userId = c.req.header("X-User-Id") || "";
 

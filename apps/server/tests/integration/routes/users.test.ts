@@ -7,7 +7,11 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 
 import { createApp } from "../../../src/app";
 import type { User } from "../../../src/repositories/interfaces/user-repository";
-import { clearTestContext, createInMemoryTestContext, type InMemoryTestContext } from "../../helpers/memory";
+import {
+  clearTestContext,
+  createInMemoryTestContext,
+  type InMemoryTestContext,
+} from "../../helpers/memory";
 
 describe("User Routes Integration", () => {
   let ctx: InMemoryTestContext;
@@ -189,7 +193,9 @@ describe("User Routes Integration", () => {
         }),
       });
 
-      const secondUserBody = (await secondUserResponse.json()) as { data: User };
+      const secondUserBody = (await secondUserResponse.json()) as {
+        data: User;
+      };
       const secondUserId = secondUserBody.data.id;
 
       // Try to create with duplicate email
@@ -205,14 +211,17 @@ describe("User Routes Integration", () => {
       expect(duplicateCreateResponse.status).toBe(409);
 
       // Try to update to duplicate email
-      const duplicateUpdateResponse = await app.request(`/users/${secondUserId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: "Second User Updated",
-          email: "taken@example.com",
-        }),
-      });
+      const duplicateUpdateResponse = await app.request(
+        `/users/${secondUserId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "Second User Updated",
+            email: "taken@example.com",
+          }),
+        },
+      );
 
       expect(duplicateUpdateResponse.status).toBe(409);
     });
@@ -252,7 +261,10 @@ describe("User Routes Integration", () => {
 
       expect(response.status).toBe(400);
 
-      const body = (await response.json()) as { type: string; errors: unknown[] };
+      const body = (await response.json()) as {
+        type: string;
+        errors: unknown[];
+      };
 
       expect(body.type).toBe("urn:app:error:validation");
       expect(body.errors).toBeDefined();

@@ -27,11 +27,13 @@ export type DeleteUserInput = z.infer<typeof DeleteUserInputSchema>;
  * @param data - Raw input data to validate
  * @returns Result with validated input or ValidationError
  */
-export const parseDeleteUserInput = (data: unknown): Result<DeleteUserInput, ValidationError> => {
+export const parseDeleteUserInput = (
+  data: unknown,
+): Result<DeleteUserInput, ValidationError> => {
   const result = DeleteUserInputSchema.safeParse(data);
 
   if (!result.success) {
-    const details = result.error.issues.map(issue => ({
+    const details = result.error.issues.map((issue) => ({
       field: issue.path.join("."),
       message: issue.message,
       code: issue.code,

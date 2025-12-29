@@ -32,7 +32,9 @@ let configuredLogLevel: LogLevel | null = null;
 /**
  * Configure logger level at runtime (e.g. from validated server env).
  */
-export function configureLogger(input: { logLevel?: string | undefined } = {}): void {
+export function configureLogger(
+  input: { logLevel?: string | undefined } = {},
+): void {
   const raw = input.logLevel?.toUpperCase();
   if (!raw) {
     configuredLogLevel = null;

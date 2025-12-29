@@ -8,7 +8,11 @@ import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 import { createApp } from "../../../src/app";
 import type { Post } from "../../../src/repositories/interfaces/post-repository";
 import type { User } from "../../../src/repositories/interfaces/user-repository";
-import { clearTestContext, createInMemoryTestContext, type InMemoryTestContext } from "../../helpers/memory";
+import {
+  clearTestContext,
+  createInMemoryTestContext,
+  type InMemoryTestContext,
+} from "../../helpers/memory";
 
 describe("Post Routes", () => {
   let ctx: InMemoryTestContext;
@@ -57,9 +61,21 @@ describe("Post Routes", () => {
     });
 
     it("should return list of posts with pagination", async () => {
-      await ctx.postRepository.create({ title: "Post 1", content: "Content 1", authorId: testUser.id });
-      await ctx.postRepository.create({ title: "Post 2", content: "Content 2", authorId: testUser.id });
-      await ctx.postRepository.create({ title: "Post 3", content: "Content 3", authorId: testUser.id });
+      await ctx.postRepository.create({
+        title: "Post 1",
+        content: "Content 1",
+        authorId: testUser.id,
+      });
+      await ctx.postRepository.create({
+        title: "Post 2",
+        content: "Content 2",
+        authorId: testUser.id,
+      });
+      await ctx.postRepository.create({
+        title: "Post 3",
+        content: "Content 3",
+        authorId: testUser.id,
+      });
 
       const response = await app.request("/posts?limit=2&offset=0");
 
@@ -82,13 +98,26 @@ describe("Post Routes", () => {
         email: "second@example.com",
       });
 
-      if (secondUserResult.isErr()) throw new Error("Failed to create second user");
+      if (secondUserResult.isErr())
+        throw new Error("Failed to create second user");
 
       const secondUser = secondUserResult.value;
 
-      await ctx.postRepository.create({ title: "Post 1", content: "Content 1", authorId: testUser.id });
-      await ctx.postRepository.create({ title: "Post 2", content: "Content 2", authorId: secondUser.id });
-      await ctx.postRepository.create({ title: "Post 3", content: "Content 3", authorId: testUser.id });
+      await ctx.postRepository.create({
+        title: "Post 1",
+        content: "Content 1",
+        authorId: testUser.id,
+      });
+      await ctx.postRepository.create({
+        title: "Post 2",
+        content: "Content 2",
+        authorId: secondUser.id,
+      });
+      await ctx.postRepository.create({
+        title: "Post 3",
+        content: "Content 3",
+        authorId: testUser.id,
+      });
 
       const response = await app.request(`/posts?authorId=${testUser.id}`);
 
@@ -101,13 +130,27 @@ describe("Post Routes", () => {
 
       expect(body.data).toHaveLength(2);
       expect(body.pagination.total).toBe(2);
-      expect(body.data.every(post => post.authorId === testUser.id)).toBe(true);
+      expect(body.data.every((post) => post.authorId === testUser.id)).toBe(
+        true,
+      );
     });
 
     it("should handle offset correctly", async () => {
-      await ctx.postRepository.create({ title: "Post 1", content: "Content 1", authorId: testUser.id });
-      await ctx.postRepository.create({ title: "Post 2", content: "Content 2", authorId: testUser.id });
-      await ctx.postRepository.create({ title: "Post 3", content: "Content 3", authorId: testUser.id });
+      await ctx.postRepository.create({
+        title: "Post 1",
+        content: "Content 1",
+        authorId: testUser.id,
+      });
+      await ctx.postRepository.create({
+        title: "Post 2",
+        content: "Content 2",
+        authorId: testUser.id,
+      });
+      await ctx.postRepository.create({
+        title: "Post 3",
+        content: "Content 3",
+        authorId: testUser.id,
+      });
 
       const response = await app.request("/posts?limit=10&offset=2");
 
@@ -216,7 +259,10 @@ describe("Post Routes", () => {
 
       expect(response.status).toBe(400);
 
-      const body = (await response.json()) as { type: string; errors: unknown[] };
+      const body = (await response.json()) as {
+        type: string;
+        errors: unknown[];
+      };
 
       expect(body.type).toBe("urn:app:error:validation");
       expect(body.errors).toBeDefined();

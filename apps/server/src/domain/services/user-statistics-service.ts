@@ -30,7 +30,12 @@ type UserReader = {
   findAll(options: {
     readonly limit: number;
     readonly offset: number;
-  }): Promise<Result<{ readonly users: readonly User[]; readonly total: number }, RepoError>>;
+  }): Promise<
+    Result<
+      { readonly users: readonly User[]; readonly total: number },
+      RepoError
+    >
+  >;
 };
 
 type PostLister = {
@@ -38,7 +43,12 @@ type PostLister = {
     readonly limit: number;
     readonly offset: number;
     readonly authorId?: string;
-  }): Promise<Result<{ readonly posts: readonly Post[]; readonly total: number }, RepoError>>;
+  }): Promise<
+    Result<
+      { readonly posts: readonly Post[]; readonly total: number },
+      RepoError
+    >
+  >;
 };
 
 /**
@@ -78,12 +88,16 @@ export interface UserStatisticsService {
   /**
    * Get detailed statistics for a specific user.
    */
-  getUserStatistics(userId: string): Promise<Result<UserStatistics, StatisticsServiceError>>;
+  getUserStatistics(
+    userId: string,
+  ): Promise<Result<UserStatistics, StatisticsServiceError>>;
 
   /**
    * Get summary statistics for all users.
    */
-  getUsersSummary(): Promise<Result<UsersStatisticsSummary, StatisticsServiceError>>;
+  getUsersSummary(): Promise<
+    Result<UsersStatisticsSummary, StatisticsServiceError>
+  >;
 }
 
 /**
@@ -97,7 +111,9 @@ export interface CreateUserStatisticsServiceDeps {
 /**
  * Create UserStatisticsService instance.
  */
-export function createUserStatisticsService(deps: CreateUserStatisticsServiceDeps): UserStatisticsService {
+export function createUserStatisticsService(
+  deps: CreateUserStatisticsServiceDeps,
+): UserStatisticsService {
   const { userRepository, postRepository } = deps;
 
   return {
@@ -138,8 +154,8 @@ export function createUserStatisticsService(deps: CreateUserStatisticsServiceDep
       const { posts } = postsResult.value;
 
       // Calculate statistics
-      const activePosts = posts.filter(p => p.deletedAt === null);
-      const deletedPosts = posts.filter(p => p.deletedAt !== null);
+      const activePosts = posts.filter((p) => p.deletedAt === null);
+      const deletedPosts = posts.filter((p) => p.deletedAt !== null);
 
       const totalPosts = posts.length;
       const activePostsCount = activePosts.length;
@@ -147,12 +163,21 @@ export function createUserStatisticsService(deps: CreateUserStatisticsServiceDep
 
       // Calculate average post length (only active posts)
       const averagePostLength =
-        activePostsCount > 0 ? activePosts.reduce((sum, post) => sum + post.content.length, 0) / activePostsCount : 0;
+        activePostsCount > 0 ?
+          activePosts.reduce((sum, post) => sum + post.content.length, 0) /
+          activePostsCount
+        : 0;
 
       // Find first and last post dates
-      const sortedPosts = [...posts].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-      const firstPostDate = sortedPosts.length > 0 ? sortedPosts[0].createdAt : null;
-      const lastPostDate = sortedPosts.length > 0 ? sortedPosts[sortedPosts.length - 1].createdAt : null;
+      const sortedPosts = [...posts].sort(
+        (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+      );
+      const firstPostDate =
+        sortedPosts.length > 0 ? sortedPosts[0].createdAt : null;
+      const lastPostDate =
+        sortedPosts.length > 0 ?
+          sortedPosts[sortedPosts.length - 1].createdAt
+        : null;
 
       return ok({
         user,
@@ -182,8 +207,8 @@ export function createUserStatisticsService(deps: CreateUserStatisticsServiceDep
       const { users, total: totalUsers } = usersResult.value;
 
       // Count active and deleted users
-      const activeUsers = users.filter(u => u.deletedAt === null).length;
-      const deletedUsers = users.filter(u => u.deletedAt !== null).length;
+      const activeUsers = users.filter((u) => u.deletedAt === null).length;
+      const deletedUsers = users.filter((u) => u.deletedAt !== null).length;
 
       // Get all posts
       const postsResult = await postRepository.findAll({
@@ -201,7 +226,8 @@ export function createUserStatisticsService(deps: CreateUserStatisticsServiceDep
       const { total: totalPosts } = postsResult.value;
 
       // Calculate average posts per user
-      const averagePostsPerUser = activeUsers > 0 ? totalPosts / activeUsers : 0;
+      const averagePostsPerUser =
+        activeUsers > 0 ? totalPosts / activeUsers : 0;
 
       return ok({
         totalUsers,

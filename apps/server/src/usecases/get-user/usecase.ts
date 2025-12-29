@@ -6,7 +6,11 @@
 import { type Result, err, ok } from "neverthrow";
 
 import { notFoundError } from "../../domain/errors";
-import type { User, UserRepository, UserRepositoryError } from "../../repositories/interfaces/user-repository";
+import type {
+  User,
+  UserRepository,
+  UserRepositoryError,
+} from "../../repositories/interfaces/user-repository";
 import type { GetUserInput } from "./input";
 
 /**

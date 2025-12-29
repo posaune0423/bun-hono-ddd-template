@@ -5,7 +5,11 @@
 
 import type { Pool } from "pg";
 
-import { createDb, createPool, type Database } from "../../src/repositories/postgres/db";
+import {
+  createDb,
+  createPool,
+  type Database,
+} from "../../src/repositories/postgres/db";
 import { createPostgresPostRepository } from "../../src/repositories/postgres/post-repository";
 import { createPostgresUserRepository } from "../../src/repositories/postgres/user-repository";
 

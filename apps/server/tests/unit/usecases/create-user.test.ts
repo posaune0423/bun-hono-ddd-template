@@ -6,7 +6,11 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 
 import { executeCreateUser } from "../../../src/usecases/create-user/usecase";
-import { clearTestContext, createInMemoryTestContext, type InMemoryTestContext } from "../../helpers/memory";
+import {
+  clearTestContext,
+  createInMemoryTestContext,
+  type InMemoryTestContext,
+} from "../../helpers/memory";
 
 describe("executeCreateUser", () => {
   let ctx: InMemoryTestContext;
@@ -45,7 +49,11 @@ describe("executeCreateUser", () => {
           userRepository: ctx.userRepository,
           userAuthenticationService: ctx.userAuthenticationService,
         },
-        { name: "User With Image", email: "image@example.com", image: "https://example.com/avatar.png" },
+        {
+          name: "User With Image",
+          email: "image@example.com",
+          image: "https://example.com/avatar.png",
+        },
       );
 
       expect(result.isOk()).toBe(true);
@@ -136,7 +144,8 @@ describe("executeCreateUser", () => {
       expect(firstResult.isOk()).toBe(true);
 
       // Verify user can be found
-      const findResult = await ctx.userRepository.findByEmail("check@example.com");
+      const findResult =
+        await ctx.userRepository.findByEmail("check@example.com");
 
       expect(findResult.isOk()).toBe(true);
 

@@ -27,10 +27,18 @@ export const env = createEnv({
       .describe("PostgreSQL connection URL"),
 
     // Server
-    PORT: z.coerce.number().int().positive().default(8787).describe("Server port number"),
+    PORT: z.coerce
+      .number()
+      .int()
+      .positive()
+      .default(8787)
+      .describe("Server port number"),
 
     // Node environment
-    NODE_ENV: z.enum(["development", "production", "test"]).default("development").describe("Node environment"),
+    NODE_ENV: z
+      .enum(["development", "production", "test"])
+      .default("development")
+      .describe("Node environment"),
   },
 
   /**
@@ -60,7 +68,7 @@ export const env = createEnv({
   /**
    * Extend the zodError to provide more information.
    */
-  onValidationError: error => {
+  onValidationError: (error) => {
     console.error("❌ Invalid environment variables:");
     for (const issue of error) {
       const path = issue.path?.join(".") ?? "unknown";
@@ -72,8 +80,10 @@ export const env = createEnv({
   /**
    * Called when server variables are accessed on the client.
    */
-  onInvalidAccess: variable => {
-    throw new Error(`❌ Attempted to access server-side environment variable "${variable}" on the client`);
+  onInvalidAccess: (variable) => {
+    throw new Error(
+      `❌ Attempted to access server-side environment variable "${variable}" on the client`,
+    );
   },
 
   /**

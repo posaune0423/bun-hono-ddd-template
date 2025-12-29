@@ -63,7 +63,9 @@ export interface UserAuthenticationService {
    * Check if email is available for registration.
    * Returns true if email is not taken.
    */
-  isEmailAvailable(email: string): Promise<Result<boolean, AuthenticationServiceError>>;
+  isEmailAvailable(
+    email: string,
+  ): Promise<Result<boolean, AuthenticationServiceError>>;
 
   /**
    * Validate email format according to domain rules.
@@ -86,7 +88,9 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /**
  * Create UserAuthenticationService instance.
  */
-export function createUserAuthenticationService(deps: CreateUserAuthenticationServiceDeps): UserAuthenticationService {
+export function createUserAuthenticationService(
+  deps: CreateUserAuthenticationServiceDeps,
+): UserAuthenticationService {
   const { userRepository } = deps;
 
   return {

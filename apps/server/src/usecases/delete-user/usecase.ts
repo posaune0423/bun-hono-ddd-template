@@ -5,7 +5,10 @@
 
 import { type Result, err, ok } from "neverthrow";
 
-import type { UserRepository, UserRepositoryError } from "../../repositories/interfaces/user-repository";
+import type {
+  UserRepository,
+  UserRepositoryError,
+} from "../../repositories/interfaces/user-repository";
 import type { DeleteUserInput } from "./input";
 
 /**

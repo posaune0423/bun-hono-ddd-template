@@ -13,7 +13,11 @@ import { type ValidationError, validationError } from "../../domain/errors";
  * All fields are optional.
  */
 const UpdateUserFieldsSchema = z.object({
-  name: z.string().min(1, "name cannot be empty").max(255, "name must be at most 255 characters").optional(),
+  name: z
+    .string()
+    .min(1, "name cannot be empty")
+    .max(255, "name must be at most 255 characters")
+    .optional(),
   email: z.email("email must be a valid email address").optional(),
   image: z.url("image must be a valid URL").max(255).optional().nullable(),
 });
@@ -24,7 +28,7 @@ const UpdateUserFieldsSchema = z.object({
  */
 export const PatchUserInputSchema = z.object({
   id: z.string().min(1, "id is required"),
-  data: UpdateUserFieldsSchema.refine(data => Object.keys(data).length > 0, {
+  data: UpdateUserFieldsSchema.refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided for update",
   }),
 });
@@ -36,7 +40,10 @@ export const PatchUserInputSchema = z.object({
 export const PutUserInputSchema = z.object({
   id: z.string().min(1, "id is required"),
   data: z.object({
-    name: z.string().min(1, "name is required").max(255, "name must be at most 255 characters"),
+    name: z
+      .string()
+      .min(1, "name is required")
+      .max(255, "name must be at most 255 characters"),
     email: z.email("email must be a valid email address"),
     image: z.url("image must be a valid URL").max(255).optional().nullable(),
   }),
@@ -58,11 +65,13 @@ export type PutUserInput = z.infer<typeof PutUserInputSchema>;
  * @param data - Raw input data to validate
  * @returns Result with validated input or ValidationError
  */
-export const parsePatchUserInput = (data: unknown): Result<PatchUserInput, ValidationError> => {
+export const parsePatchUserInput = (
+  data: unknown,
+): Result<PatchUserInput, ValidationError> => {
   const result = PatchUserInputSchema.safeParse(data);
 
   if (!result.success) {
-    const details = result.error.issues.map(issue => ({
+    const details = result.error.issues.map((issue) => ({
       field: issue.path.join("."),
       message: issue.message,
       code: issue.code,
@@ -80,11 +89,13 @@ export const parsePatchUserInput = (data: unknown): Result<PatchUserInput, Valid
  * @param data - Raw input data to validate
  * @returns Result with validated input or ValidationError
  */
-export const parsePutUserInput = (data: unknown): Result<PutUserInput, ValidationError> => {
+export const parsePutUserInput = (
+  data: unknown,
+): Result<PutUserInput, ValidationError> => {
   const result = PutUserInputSchema.safeParse(data);
 
   if (!result.success) {
-    const details = result.error.issues.map(issue => ({
+    const details = result.error.issues.map((issue) => ({
       field: issue.path.join("."),
       message: issue.message,
       code: issue.code,

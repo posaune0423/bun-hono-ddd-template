@@ -13,7 +13,11 @@ import { type ValidationError, validationError } from "../../domain/errors";
  * All fields are optional.
  */
 const UpdatePostFieldsSchema = z.object({
-  title: z.string().min(1, "title cannot be empty").max(255, "title must be at most 255 characters").optional(),
+  title: z
+    .string()
+    .min(1, "title cannot be empty")
+    .max(255, "title must be at most 255 characters")
+    .optional(),
   content: z.string().min(1, "content cannot be empty").optional(),
 });
 
@@ -24,7 +28,7 @@ const UpdatePostFieldsSchema = z.object({
 export const PatchPostInputSchema = z.object({
   id: z.string().min(1, "id is required"),
   userId: z.string().min(1, "userId is required"),
-  data: UpdatePostFieldsSchema.refine(data => Object.keys(data).length > 0, {
+  data: UpdatePostFieldsSchema.refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided for update",
   }),
 });
@@ -37,7 +41,10 @@ export const PutPostInputSchema = z.object({
   id: z.string().min(1, "id is required"),
   userId: z.string().min(1, "userId is required"),
   data: z.object({
-    title: z.string().min(1, "title is required").max(255, "title must be at most 255 characters"),
+    title: z
+      .string()
+      .min(1, "title is required")
+      .max(255, "title must be at most 255 characters"),
     content: z.string().min(1, "content is required"),
   }),
 });
@@ -58,11 +65,13 @@ export type PutPostInput = z.infer<typeof PutPostInputSchema>;
  * @param data - Raw input data to validate
  * @returns Result with validated input or ValidationError
  */
-export const parsePatchPostInput = (data: unknown): Result<PatchPostInput, ValidationError> => {
+export const parsePatchPostInput = (
+  data: unknown,
+): Result<PatchPostInput, ValidationError> => {
   const result = PatchPostInputSchema.safeParse(data);
 
   if (!result.success) {
-    const details = result.error.issues.map(issue => ({
+    const details = result.error.issues.map((issue) => ({
       field: issue.path.join("."),
       message: issue.message,
       code: issue.code,
@@ -80,11 +89,13 @@ export const parsePatchPostInput = (data: unknown): Result<PatchPostInput, Valid
  * @param data - Raw input data to validate
  * @returns Result with validated input or ValidationError
  */
-export const parsePutPostInput = (data: unknown): Result<PutPostInput, ValidationError> => {
+export const parsePutPostInput = (
+  data: unknown,
+): Result<PutPostInput, ValidationError> => {
   const result = PutPostInputSchema.safeParse(data);
 
   if (!result.success) {
-    const details = result.error.issues.map(issue => ({
+    const details = result.error.issues.map((issue) => ({
       field: issue.path.join("."),
       message: issue.message,
       code: issue.code,

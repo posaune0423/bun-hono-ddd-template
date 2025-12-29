@@ -27,11 +27,13 @@ export type GetUserInput = z.infer<typeof GetUserInputSchema>;
  * @param data - Raw input data to validate
  * @returns Result with validated input or ValidationError
  */
-export const parseGetUserInput = (data: unknown): Result<GetUserInput, ValidationError> => {
+export const parseGetUserInput = (
+  data: unknown,
+): Result<GetUserInput, ValidationError> => {
   const result = GetUserInputSchema.safeParse(data);
 
   if (!result.success) {
-    const details = result.error.issues.map(issue => ({
+    const details = result.error.issues.map((issue) => ({
       field: issue.path.join("."),
       message: issue.message,
       code: issue.code,

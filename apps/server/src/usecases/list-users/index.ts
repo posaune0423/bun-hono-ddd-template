@@ -7,4 +7,9 @@ export { ListUsersInputSchema, parseListUsersInput } from "./input";
 export type { ListUsersInput } from "./input";
 
 export { executeListUsers } from "./usecase";
-export type { ListUsersDeps, ListUsersError, ListUsersOutput, PaginationInfo } from "./usecase";
+export type {
+  ListUsersDeps,
+  ListUsersError,
+  ListUsersOutput,
+  PaginationInfo,
+} from "./usecase";

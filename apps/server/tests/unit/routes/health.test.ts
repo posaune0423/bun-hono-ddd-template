@@ -13,14 +13,20 @@ describe("GET /health", () => {
 
     expect(response.status).toBe(200);
 
-    const body = (await response.json()) as { status: string; timestamp: string };
+    const body = (await response.json()) as {
+      status: string;
+      timestamp: string;
+    };
     expect(body.status).toBe("ok");
     expect(body.timestamp).toBeDefined();
   });
 
   it("should return valid ISO timestamp", async () => {
     const response = await health.request("/");
-    const body = (await response.json()) as { status: string; timestamp: string };
+    const body = (await response.json()) as {
+      status: string;
+      timestamp: string;
+    };
 
     const timestamp = new Date(body.timestamp);
     expect(timestamp.toISOString()).toBe(body.timestamp);

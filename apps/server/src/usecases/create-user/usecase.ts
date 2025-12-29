@@ -6,9 +6,17 @@
 import { type Result, err, ok } from "neverthrow";
 
 import { conflictError } from "../../domain/errors";
-import type { ConflictError, NotFoundError, UnexpectedError, ValidationError } from "../../domain/errors";
+import type {
+  ConflictError,
+  NotFoundError,
+  UnexpectedError,
+  ValidationError,
+} from "../../domain/errors";
 import type { UserAuthenticationService } from "../../domain/services";
-import type { User, UserRepository } from "../../repositories/interfaces/user-repository";
+import type {
+  User,
+  UserRepository,
+} from "../../repositories/interfaces/user-repository";
 import type { CreateUserInput } from "./input";
 
 /**
@@ -30,7 +38,11 @@ export interface CreateUserDeps {
 /**
  * Usecase error - combines domain errors with repository errors.
  */
-export type CreateUserError = ConflictError | NotFoundError | UnexpectedError | ValidationError;
+export type CreateUserError =
+  | ConflictError
+  | NotFoundError
+  | UnexpectedError
+  | ValidationError;
 
 /**
  * Execute the create-user usecase.
@@ -46,7 +58,9 @@ export const executeCreateUser = async (
   const { userRepository, userAuthenticationService } = deps;
 
   // Check if email is available using domain service
-  const availabilityResult = await userAuthenticationService.isEmailAvailable(input.email);
+  const availabilityResult = await userAuthenticationService.isEmailAvailable(
+    input.email,
+  );
 
   if (availabilityResult.isErr()) {
     return err(availabilityResult.error);

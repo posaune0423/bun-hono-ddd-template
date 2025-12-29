@@ -7,7 +7,10 @@ import { createPostAuthorizationService } from "../../src/domain/services/post-a
 import { createUserAuthenticationService } from "../../src/domain/services/user-authentication-service";
 import type { PostAuthorizationService } from "../../src/domain/services/post-authorization-service";
 import type { UserAuthenticationService } from "../../src/domain/services/user-authentication-service";
-import { createInMemoryPostRepository, createInMemoryUserRepository } from "../../src/repositories/memory";
+import {
+  createInMemoryPostRepository,
+  createInMemoryUserRepository,
+} from "../../src/repositories/memory";
 import type { PostRepository } from "../../src/repositories/interfaces/post-repository";
 import type { UserRepository } from "../../src/repositories/interfaces/user-repository";
 
@@ -32,8 +35,13 @@ export const createInMemoryTestContext = (): InMemoryTestContext => {
   const postRepository = createInMemoryPostRepository();
 
   // Create domain services
-  const userAuthenticationService = createUserAuthenticationService({ userRepository });
-  const postAuthorizationService = createPostAuthorizationService({ userRepository, postRepository });
+  const userAuthenticationService = createUserAuthenticationService({
+    userRepository,
+  });
+  const postAuthorizationService = createPostAuthorizationService({
+    userRepository,
+    postRepository,
+  });
 
   return {
     userRepository,

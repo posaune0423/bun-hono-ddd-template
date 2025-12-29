@@ -5,7 +5,11 @@
 
 import { type Result, err, ok } from "neverthrow";
 
-import type { Post, PostRepository, PostRepositoryError } from "../../repositories/interfaces/post-repository";
+import type {
+  Post,
+  PostRepository,
+  PostRepositoryError,
+} from "../../repositories/interfaces/post-repository";
 import type { ListPostsInput } from "./input";
 
 /**

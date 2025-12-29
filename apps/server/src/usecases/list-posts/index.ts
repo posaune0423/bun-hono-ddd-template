@@ -7,4 +7,9 @@ export { ListPostsInputSchema, parseListPostsInput } from "./input";
 export type { ListPostsInput } from "./input";
 
 export { executeListPosts } from "./usecase";
-export type { ListPostsDeps, ListPostsError, ListPostsOutput, PaginationInfo } from "./usecase";
+export type {
+  ListPostsDeps,
+  ListPostsError,
+  ListPostsOutput,
+  PaginationInfo,
+} from "./usecase";

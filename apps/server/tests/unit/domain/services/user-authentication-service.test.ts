@@ -42,7 +42,9 @@ describe("UserAuthenticationService", () => {
         userRepository: mockUserRepository,
       });
 
-      const result = await service.authenticateByEmail({ email: "test@example.com" });
+      const result = await service.authenticateByEmail({
+        email: "test@example.com",
+      });
 
       expect(result.isOk()).toBe(true);
       if (result.isOk()) {
@@ -61,7 +63,9 @@ describe("UserAuthenticationService", () => {
         userRepository: mockUserRepository,
       });
 
-      const result = await service.authenticateByEmail({ email: "nonexistent@example.com" });
+      const result = await service.authenticateByEmail({
+        email: "nonexistent@example.com",
+      });
 
       expect(result.isOk()).toBe(true);
       if (result.isOk()) {
@@ -83,7 +87,9 @@ describe("UserAuthenticationService", () => {
         userRepository: mockUserRepository,
       });
 
-      const result = await service.authenticateByEmail({ email: "deleted@example.com" });
+      const result = await service.authenticateByEmail({
+        email: "deleted@example.com",
+      });
 
       expect(result.isOk()).toBe(true);
       if (result.isOk()) {
@@ -100,7 +106,9 @@ describe("UserAuthenticationService", () => {
         userRepository: mockUserRepository,
       });
 
-      const result = await service.authenticateByEmail({ email: "invalid-email" });
+      const result = await service.authenticateByEmail({
+        email: "invalid-email",
+      });
 
       expect(result.isErr()).toBe(true);
       if (result.isErr()) {
@@ -122,7 +130,9 @@ describe("UserAuthenticationService", () => {
         userRepository: mockUserRepository,
       });
 
-      const result = await service.authenticateByEmail({ email: "test@example.com" });
+      const result = await service.authenticateByEmail({
+        email: "test@example.com",
+      });
 
       expect(result.isErr()).toBe(true);
       if (result.isErr()) {

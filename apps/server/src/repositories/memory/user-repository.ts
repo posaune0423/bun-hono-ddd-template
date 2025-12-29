@@ -22,11 +22,15 @@ import type {
  *
  * @returns UserRepository implementation
  */
-export const createInMemoryUserRepository = (): UserRepository & { clear: () => void } => {
+export const createInMemoryUserRepository = (): UserRepository & {
+  clear: () => void;
+} => {
   const users = new Map<string, User>();
 
   return {
-    async findById(id: string): Promise<Result<User | null, UserRepositoryError>> {
+    async findById(
+      id: string,
+    ): Promise<Result<User | null, UserRepositoryError>> {
       const user = users.get(id);
 
       if (user?.deletedAt) {
@@ -36,7 +40,9 @@ export const createInMemoryUserRepository = (): UserRepository & { clear: () => 
       return ok(user ?? null);
     },
 
-    async findByEmail(email: string): Promise<Result<User | null, UserRepositoryError>> {
+    async findByEmail(
+      email: string,
+    ): Promise<Result<User | null, UserRepositoryError>> {
       for (const user of users.values()) {
         if (user.email === email && !user.deletedAt) {
           return ok(user);
@@ -46,15 +52,24 @@ export const createInMemoryUserRepository = (): UserRepository & { clear: () => 
       return ok(null);
     },
 
-    async findAll(options: FindAllUsersOptions): Promise<Result<FindAllUsersResult, UserRepositoryError>> {
-      const activeUsers = Array.from(users.values()).filter(user => !user.deletedAt);
+    async findAll(
+      options: FindAllUsersOptions,
+    ): Promise<Result<FindAllUsersResult, UserRepositoryError>> {
+      const activeUsers = Array.from(users.values()).filter(
+        (user) => !user.deletedAt,
+      );
       const total = activeUsers.length;
-      const sliced = activeUsers.slice(options.offset, options.offset + options.limit);
+      const sliced = activeUsers.slice(
+        options.offset,
+        options.offset + options.limit,
+      );
 
       return ok({ users: sliced, total });
     },
 
-    async create(input: CreateUserInput): Promise<Result<User, UserRepositoryError>> {
+    async create(
+      input: CreateUserInput,
+    ): Promise<Result<User, UserRepositoryError>> {
       // Check for existing email (exclude deleted users)
       for (const user of users.values()) {
         if (user.email === input.email && !user.deletedAt) {
@@ -84,7 +99,10 @@ export const createInMemoryUserRepository = (): UserRepository & { clear: () => 
       return ok(newUser);
     },
 
-    async update(id: string, input: UpdateUserInput): Promise<Result<User, UserRepositoryError>> {
+    async update(
+      id: string,
+      input: UpdateUserInput,
+    ): Promise<Result<User, UserRepositoryError>> {
       const existing = users.get(id);
 
       if (!existing || existing.deletedAt) {

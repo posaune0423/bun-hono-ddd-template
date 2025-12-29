@@ -7,7 +7,11 @@ import { type Result, err, ok } from "neverthrow";
 
 import { users } from "@bun-hono-ddd-template/db";
 
-import { conflictError, notFoundError, unexpectedError } from "../../domain/errors";
+import {
+  conflictError,
+  notFoundError,
+  unexpectedError,
+} from "../../domain/errors";
 import type {
   CreateUserInput,
   FindAllUsersOptions,
@@ -50,7 +54,9 @@ const isUniqueViolation = (error: unknown): boolean => {
  * @returns UserRepository implementation
  */
 export const createPostgresUserRepository = (db: Database): UserRepository => ({
-  async findById(id: string): Promise<Result<User | null, UserRepositoryError>> {
+  async findById(
+    id: string,
+  ): Promise<Result<User | null, UserRepositoryError>> {
     try {
       const result = await db
         .select()
@@ -64,7 +70,9 @@ export const createPostgresUserRepository = (db: Database): UserRepository => ({
     }
   },
 
-  async findByEmail(email: string): Promise<Result<User | null, UserRepositoryError>> {
+  async findByEmail(
+    email: string,
+  ): Promise<Result<User | null, UserRepositoryError>> {
     try {
       const result = await db
         .select()
@@ -78,11 +86,21 @@ export const createPostgresUserRepository = (db: Database): UserRepository => ({
     }
   },
 
-  async findAll(options: FindAllUsersOptions): Promise<Result<FindAllUsersResult, UserRepositoryError>> {
+  async findAll(
+    options: FindAllUsersOptions,
+  ): Promise<Result<FindAllUsersResult, UserRepositoryError>> {
     try {
       const [usersResult, countResult] = await Promise.all([
-        db.select().from(users).where(isNull(users.deletedAt)).limit(options.limit).offset(options.offset),
-        db.select({ count: count() }).from(users).where(isNull(users.deletedAt)),
+        db
+          .select()
+          .from(users)
+          .where(isNull(users.deletedAt))
+          .limit(options.limit)
+          .offset(options.offset),
+        db
+          .select({ count: count() })
+          .from(users)
+          .where(isNull(users.deletedAt)),
       ]);
 
       return ok({
@@ -94,7 +112,9 @@ export const createPostgresUserRepository = (db: Database): UserRepository => ({
     }
   },
 
-  async create(input: CreateUserInput): Promise<Result<User, UserRepositoryError>> {
+  async create(
+    input: CreateUserInput,
+  ): Promise<Result<User, UserRepositoryError>> {
     try {
       const result = await db
         .insert(users)
@@ -126,7 +146,10 @@ export const createPostgresUserRepository = (db: Database): UserRepository => ({
     }
   },
 
-  async update(id: string, input: UpdateUserInput): Promise<Result<User, UserRepositoryError>> {
+  async update(
+    id: string,
+    input: UpdateUserInput,
+  ): Promise<Result<User, UserRepositoryError>> {
     try {
       // Build update object with only provided fields
       const updateData: Partial<typeof users.$inferInsert> = {

@@ -22,11 +22,15 @@ import type {
  *
  * @returns PostRepository implementation
  */
-export const createInMemoryPostRepository = (): PostRepository & { clear: () => void } => {
+export const createInMemoryPostRepository = (): PostRepository & {
+  clear: () => void;
+} => {
   const posts = new Map<string, Post>();
 
   return {
-    async findById(id: string): Promise<Result<Post | null, PostRepositoryError>> {
+    async findById(
+      id: string,
+    ): Promise<Result<Post | null, PostRepositoryError>> {
       const post = posts.get(id);
 
       if (post?.deletedAt) {
@@ -36,21 +40,32 @@ export const createInMemoryPostRepository = (): PostRepository & { clear: () => 
       return ok(post ?? null);
     },
 
-    async findAll(options: FindAllPostsOptions): Promise<Result<FindAllPostsResult, PostRepositoryError>> {
-      let activePosts = Array.from(posts.values()).filter(post => !post.deletedAt);
+    async findAll(
+      options: FindAllPostsOptions,
+    ): Promise<Result<FindAllPostsResult, PostRepositoryError>> {
+      let activePosts = Array.from(posts.values()).filter(
+        (post) => !post.deletedAt,
+      );
 
       // Filter by authorId if provided
       if (options.authorId) {
-        activePosts = activePosts.filter(post => post.authorId === options.authorId);
+        activePosts = activePosts.filter(
+          (post) => post.authorId === options.authorId,
+        );
       }
 
       const total = activePosts.length;
-      const sliced = activePosts.slice(options.offset, options.offset + options.limit);
+      const sliced = activePosts.slice(
+        options.offset,
+        options.offset + options.limit,
+      );
 
       return ok({ posts: sliced, total });
     },
 
-    async create(input: CreatePostInput): Promise<Result<Post, PostRepositoryError>> {
+    async create(
+      input: CreatePostInput,
+    ): Promise<Result<Post, PostRepositoryError>> {
       const now = new Date();
       const newPost: Post = {
         id: crypto.randomUUID(),
@@ -67,7 +82,10 @@ export const createInMemoryPostRepository = (): PostRepository & { clear: () => 
       return ok(newPost);
     },
 
-    async update(id: string, input: UpdatePostInput): Promise<Result<Post, PostRepositoryError>> {
+    async update(
+      id: string,
+      input: UpdatePostInput,
+    ): Promise<Result<Post, PostRepositoryError>> {
       const existing = posts.get(id);
 
       if (!existing || existing.deletedAt) {

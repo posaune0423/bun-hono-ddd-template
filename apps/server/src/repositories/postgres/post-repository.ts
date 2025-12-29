@@ -39,7 +39,9 @@ const toPost = (row: typeof posts.$inferSelect): Post => ({
  * @returns PostRepository implementation
  */
 export const createPostgresPostRepository = (db: Database): PostRepository => ({
-  async findById(id: string): Promise<Result<Post | null, PostRepositoryError>> {
+  async findById(
+    id: string,
+  ): Promise<Result<Post | null, PostRepositoryError>> {
     try {
       const result = await db
         .select()
@@ -53,7 +55,9 @@ export const createPostgresPostRepository = (db: Database): PostRepository => ({
     }
   },
 
-  async findAll(options: FindAllPostsOptions): Promise<Result<FindAllPostsResult, PostRepositoryError>> {
+  async findAll(
+    options: FindAllPostsOptions,
+  ): Promise<Result<FindAllPostsResult, PostRepositoryError>> {
     try {
       // Build where conditions
       const conditions = [isNull(posts.deletedAt)];
@@ -65,7 +69,12 @@ export const createPostgresPostRepository = (db: Database): PostRepository => ({
       const whereClause = and(...conditions);
 
       const [postsResult, countResult] = await Promise.all([
-        db.select().from(posts).where(whereClause).limit(options.limit).offset(options.offset),
+        db
+          .select()
+          .from(posts)
+          .where(whereClause)
+          .limit(options.limit)
+          .offset(options.offset),
         db.select({ count: count() }).from(posts).where(whereClause),
       ]);
 
@@ -78,7 +87,9 @@ export const createPostgresPostRepository = (db: Database): PostRepository => ({
     }
   },
 
-  async create(input: CreatePostInput): Promise<Result<Post, PostRepositoryError>> {
+  async create(
+    input: CreatePostInput,
+  ): Promise<Result<Post, PostRepositoryError>> {
     try {
       const result = await db
         .insert(posts)
@@ -101,7 +112,10 @@ export const createPostgresPostRepository = (db: Database): PostRepository => ({
     }
   },
 
-  async update(id: string, input: UpdatePostInput): Promise<Result<Post, PostRepositoryError>> {
+  async update(
+    id: string,
+    input: UpdatePostInput,
+  ): Promise<Result<Post, PostRepositoryError>> {
     try {
       // Build update object with only provided fields
       const updateData: Partial<typeof posts.$inferInsert> = {

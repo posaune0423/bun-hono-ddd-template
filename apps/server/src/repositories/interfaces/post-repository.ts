@@ -77,7 +77,9 @@ export interface PostRepository {
    * Excludes soft-deleted posts.
    * Optionally filter by authorId.
    */
-  findAll(options: FindAllPostsOptions): Promise<Result<FindAllPostsResult, PostRepositoryError>>;
+  findAll(
+    options: FindAllPostsOptions,
+  ): Promise<Result<FindAllPostsResult, PostRepositoryError>>;
 
   /**
    * Create a new post.
@@ -88,7 +90,10 @@ export interface PostRepository {
    * Update an existing post.
    * Returns NotFoundError if post does not exist.
    */
-  update(id: string, input: UpdatePostInput): Promise<Result<Post, PostRepositoryError>>;
+  update(
+    id: string,
+    input: UpdatePostInput,
+  ): Promise<Result<Post, PostRepositoryError>>;
 
   /**
    * Soft delete a post by setting deletedAt.

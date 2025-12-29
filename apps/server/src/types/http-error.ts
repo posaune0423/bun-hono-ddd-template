@@ -78,7 +78,7 @@ export const ERROR_TITLES: Record<string, string> = {
  * Convert a Zod error to ValidationDetail array.
  */
 export const zodErrorToDetails = (error: ZodError): ValidationDetail[] =>
-  error.issues.map(issue => ({
+  error.issues.map((issue) => ({
     field: issue.path.join("."),
     message: issue.message,
     code: issue.code,

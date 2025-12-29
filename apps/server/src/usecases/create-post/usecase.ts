@@ -6,8 +6,15 @@
 import { type Result, err, ok } from "neverthrow";
 
 import { notFoundError } from "../../domain/errors";
-import type { ConflictError, NotFoundError, UnexpectedError } from "../../domain/errors";
-import type { Post, PostRepository } from "../../repositories/interfaces/post-repository";
+import type {
+  ConflictError,
+  NotFoundError,
+  UnexpectedError,
+} from "../../domain/errors";
+import type {
+  Post,
+  PostRepository,
+} from "../../repositories/interfaces/post-repository";
 import type { UserRepository } from "../../repositories/interfaces/user-repository";
 import type { CreatePostInput } from "./input";
 
