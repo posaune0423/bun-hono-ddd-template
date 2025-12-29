@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "allow": ["Skill(mermaid-er-diagram)", "Skill(ui-ux-pro-max)", "Bash(python3:*)", "Bash(open:*)"]
+  }
+}
